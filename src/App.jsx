@@ -35,14 +35,14 @@ const TodoList = () => {
           />
           <button
             onClick={handleAddTodo}
-            className="ml-12 text-white px-3 py-2 rounded"
+            className="ml-5 text-white px-3 py-2 rounded"
           >
             Save
           </button>
         </div>
         <ol className="">
           {todos.map((todo) => (
-            <li key={todo.id} className="mb-2">
+            <li key={todo.id} className="flex mb-2">
               <input
                 type="text"
                 value={todo.text}
@@ -51,7 +51,7 @@ const TodoList = () => {
               />
               <button
                 onClick={() => handleDeleteTodo(todo.id)}
-                className="ml-12"
+                className="ml-5"
               >
                 Delete
               </button>
