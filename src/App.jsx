@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTodo, updateTodo, deleteTodo } from './redux/slices/listSlice';
 
-function App() {
-  const [count, setCount] = useState(0)
+const TodoList = () => {
+  const todos = useSelector((state) => state.todos);
+  const dispatch = useDispatch();
+  const [newTodo, setNewTodo] = useState('');
+
+  const handleAddTodo = () => {
+    if (newTodo.trim()) {
+      dispatch(addTodo({ id: Date.now(), text: newTodo }));
+      setNewTodo('');
+    }
+  };
+
+  const handleUpdateTodo = (id, text) => {
+    dispatch(updateTodo({ id, text }));
+  };
+
+  const handleDeleteTodo = (id) => {
+    dispatch(deleteTodo(id));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='flex items-center justify-center w-full'>
+      <div className="p-4 max-w-md mx-auto">
+        <h1 className="text-2xl font-bold mb-4">To-Do List</h1>
+        <div className="flex mb-4">
+          <input
+            type="text"
+            className="border rounded w-full px-3 py-2 mr-2"
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+          />
+          <button
+            onClick={handleAddTodo}
+            className="ml-12 text-white px-3 py-2 rounded"
+          >
+            Save
+          </button>
+        </div>
+        <ol className="">
+          {todos.map((todo) => (
+            <li key={todo.id} className="mb-2">
+              <input
+                type="text"
+                value={todo.text}
+                onChange={(e) => handleUpdateTodo(todo.id, e.target.value)}
+                className="border rounded px-2 py-1 w-full"
+              />
+              <button
+                onClick={() => handleDeleteTodo(todo.id)}
+                className="ml-12"
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ol>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default App
+export default TodoList;
